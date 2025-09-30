@@ -9,7 +9,8 @@ public class ClientService {
     public Client createClientAccount(String number, String email){
 
         String validNumber = Validator.numberValidator(number);
-
+        String validEmail = Validator.emailValidator(email);
 
     }
+
 }
