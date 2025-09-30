@@ -11,6 +11,10 @@ public class ClientService {
         String validNumber = Validator.numberValidator(number);
         String validEmail = Validator.emailValidator(email);
 
+        Client client = new Client(validNumber,validEmail);
+        Client createdClient = DAOInterface.create(client);
+
+        return createdClient;
     }
 
 }
