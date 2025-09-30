@@ -1,6 +1,6 @@
-package main.java.com.business.account;
+package main.java.com.entity.account;
 
-import main.java.com.business.enums.AccountType;
+import main.java.com.entity.enums.AccountType;
 import main.java.com.utility.Helper;
 
 import java.util.UUID;

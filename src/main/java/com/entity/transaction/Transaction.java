@@ -1,10 +1,9 @@
-package main.java.com.business.transaction;
+package main.java.com.entity.transaction;
 
-import main.java.com.business.enums.TransactionType;
+import main.java.com.entity.enums.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 

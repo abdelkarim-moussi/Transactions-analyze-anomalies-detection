@@ -1,4 +1,4 @@
-package main.java.com.business.client;
+package main.java.com.entity.client;
 
 import java.util.UUID;
 

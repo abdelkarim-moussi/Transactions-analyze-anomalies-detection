@@ -1,4 +1,4 @@
-package main.java.com.business.enums;
+package main.java.com.entity.enums;
 
 public enum AccountType {
     current_account,
