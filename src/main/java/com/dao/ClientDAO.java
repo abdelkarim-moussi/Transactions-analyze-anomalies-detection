@@ -61,6 +61,26 @@ private static Connection connection = DataBaseConnection.getConnection();
 
     @Override
     public Client finById(String id){
+        Client client = null;
+        var findOneSql = "SELECT FROM clients WHERE id= ?";
+        if(id.trim().isEmpty()){
+
+            try{
+            var findOnePreparedStatement = connection.prepareStatement(findOneSql);
+            findOnePreparedStatement.setString(1,id);
+            var resultSet = findOnePreparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                client = new Client(resultSet.getString("id"),
+                        resultSet.getString("number"),
+                        resultSet.getString("email"));
+            }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+            return client;
+
+        }
         return null;
     }
 
