@@ -11,15 +11,19 @@ public class ClientService {
          daoInterface = new ClientDAO();
     }
 
-    public Client createClientAccount(String number, String email){
+    public int createClientAccount(String number, String email){
 
         String validNumber = Validator.numberValidator(number);
         String validEmail = Validator.emailValidator(email);
+        var result = 0;
+
+        if(!validNumber.trim().isEmpty() && !validEmail.trim().isEmpty()){
 
         Client client = new Client(validNumber,validEmail);
-        Client createdClient = (Client) daoInterface.create(client);
+        result = daoInterface.create(client);
+        }
 
-        return createdClient;
+        return result;
     }
 
 }
