@@ -6,15 +6,26 @@ public class Test {
 
     private static ClientService clientService = new ClientService();
 
-    public static void test (){
+    public static void createClientTest (){
         try{
-        if(clientService.createClientAccount("+212612345679","example@gmail.com") == 1){
-            System.out.println("client created succefully");
-        }else System.out.println("couldn't create account");
+            if(clientService.createClientAccount("+212612345679","example@gmail.com") == 1){
+                System.out.println("client created succefully");
+            }else System.out.println("couldn't create account");
 
         }catch (NullPointerException e){
             e.printStackTrace();
         }
 
+    }
+
+    public static void updateClientTest(){
+        try{
+            if(clientService.updateClientAccount("7e9a4887-0","+212612345678","email@gmail.com") == 1){
+                System.out.println("client updated succefully");
+            }else System.out.println("couldn't update account");
+
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 }
