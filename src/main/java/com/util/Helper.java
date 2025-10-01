@@ -1,4 +1,4 @@
-package main.java.com.utility;
+package main.java.com.util;
 import java.math.BigInteger;
 import java.util.UUID;
 

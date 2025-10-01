@@ -1,7 +1,7 @@
 package main.java.com.entity.account;
 
 import main.java.com.entity.enums.AccountType;
-import main.java.com.utility.Helper;
+import main.java.com.util.Helper;
 
 import java.util.UUID;
 
