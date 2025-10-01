@@ -1,4 +1,4 @@
-package main.java.com.utility.exceptions;
+package main.java.com.util.exceptions;
 
 public class StringNotMatchException extends Exception{
     public StringNotMatchException(String m){

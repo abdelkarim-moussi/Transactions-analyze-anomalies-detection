@@ -1,8 +1,6 @@
-package main.java.com.utility;
+package main.java.com.util;
 
-import main.java.com.utility.exceptions.StringNotMatchException;
-
-import java.util.regex.Pattern;
+import main.java.com.util.exceptions.StringNotMatchException;
 
 public class Validator {
 
