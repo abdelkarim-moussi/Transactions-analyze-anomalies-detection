@@ -62,8 +62,8 @@ private static Connection connection = DataBaseConnection.getConnection();
     @Override
     public Client finById(String id){
         Client client = null;
-        var findOneSql = "SELECT FROM clients WHERE id= ?";
-        if(id.trim().isEmpty()){
+        var findOneSql = "SELECT * FROM clients WHERE id= ?";
+        if(!id.trim().isEmpty()){
 
             try{
             var findOnePreparedStatement = connection.prepareStatement(findOneSql);
