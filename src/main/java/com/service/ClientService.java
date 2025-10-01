@@ -44,7 +44,17 @@ public class ClientService {
         }
 
         return result;
-
     }
 
+    public int deleteClientAccount(String id){
+        var result = 0;
+        if(!id.trim().isEmpty()){
+            Optional<Client> dbClient = Optional.ofNullable((Client)daoInterface.finById(id));
+            if(dbClient.isPresent()){
+                result = daoInterface.delete(id);
+            }
+        }
+
+        return result;
+    }
 }
