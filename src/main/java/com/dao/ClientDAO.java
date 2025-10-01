@@ -20,9 +20,9 @@ private static Connection connection = DataBaseConnection.getConnection();
                 insertStatement.setString(1,client.id());
                 insertStatement.setString(2,client.number());
                 insertStatement.setString(3,client.email());
-
-                var resultSet = insertStatement.executeUpdate();
-                return resultSet;
+                var rowResult = insertStatement.executeUpdate();
+                insertStatement.close();
+                return rowResult;
 
             }catch (SQLException e){
                 e.printStackTrace();
@@ -38,7 +38,24 @@ private static Connection connection = DataBaseConnection.getConnection();
     }
 
     @Override
-    public int update(String id,Client client){
+    public int update(Client client){
+
+        var updateSql = "UPDATE clients SET number = ? , email = ? WHERE id = ?";
+        if(client != null){
+            try{
+                var updatePreparedStatement = connection.prepareStatement(updateSql);
+                updatePreparedStatement.setString(1,client.number());
+                updatePreparedStatement.setString(2,client.email());
+                updatePreparedStatement.setString(3,client.id());
+
+                var rowResult = updatePreparedStatement.executeUpdate();
+                updatePreparedStatement.close();
+                return rowResult;
+
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
         return 0;
     }
 

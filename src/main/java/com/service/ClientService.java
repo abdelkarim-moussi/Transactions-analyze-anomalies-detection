@@ -5,6 +5,9 @@ import main.java.com.dao.DAOInterface;
 import main.java.com.entity.client.Client;
 import main.java.com.util.Validator;
 
+import java.util.Objects;
+import java.util.Optional;
+
 public class ClientService {
     private final DAOInterface daoInterface;
     public ClientService(){
@@ -18,12 +21,30 @@ public class ClientService {
         var result = 0;
 
         if(!validNumber.trim().isEmpty() && !validEmail.trim().isEmpty()){
-
-        Client client = new Client(validNumber,validEmail);
-        result = daoInterface.create(client);
+            Client client = new Client(validNumber,validEmail);
+            result = daoInterface.create(client);
         }
 
         return result;
+    }
+
+    public int updateClientAccount(String id,String newNumber,String newEmail){
+        String validNewNumber = Validator.numberValidator(newNumber);
+        String validNewEmail = Validator.emailValidator(newEmail);
+        var result = 0;
+
+        if(!id.trim().isEmpty()){
+            Optional<Client> dbClient = (Optional.ofNullable((Client) daoInterface.finById(id)));
+            if(dbClient.isPresent()){
+                if(!validNewNumber.trim().isEmpty() && !validNewEmail.trim().isEmpty()){
+                    Client client = new Client(dbClient.get().id(),validNewNumber,validNewEmail);
+                    result = daoInterface.update(client);
+                }
+            }
+        }
+
+        return result;
+
     }
 
 }
