@@ -34,6 +34,22 @@ private static Connection connection = DataBaseConnection.getConnection();
 
     @Override
     public int delete(String id){
+
+        var deleteSql = "DELETE FROM clients WHERE id = ?";
+
+        if(!id.trim().isEmpty()){
+
+            try{
+            var deletePreparedStatement = connection.prepareStatement(deleteSql);
+            deletePreparedStatement.setString(1,id);
+            var rowResult = deletePreparedStatement.executeUpdate();
+            return rowResult;
+
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+
+        }
         return 0;
     }
 

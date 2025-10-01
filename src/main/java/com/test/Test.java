@@ -28,4 +28,15 @@ public class Test {
             e.printStackTrace();
         }
     }
+
+    public static void deleteClientTest(){
+        try {
+            var res = clientService.deleteClientAccount("7e9a4887-0");
+            if(res > 0){
+                System.out.println("client deleted succefully");
+            }else System.out.println("couldn't delete client");
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+    }
 }
