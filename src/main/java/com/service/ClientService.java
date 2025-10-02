@@ -33,7 +33,7 @@ public class ClientService {
         var result = 0;
 
         if(!id.trim().isEmpty()){
-            Optional<Client> dbClient = (Optional.ofNullable((Client) daoInterface.finById(id)));
+            Optional<Client> dbClient = (Optional.ofNullable((Client) daoInterface.findById(id)));
             if(dbClient.isPresent()){
                 if(!validNewNumber.trim().isEmpty() && !validNewEmail.trim().isEmpty()){
                     Client client = new Client(dbClient.get().id(),validNewNumber,validNewEmail);
@@ -48,7 +48,7 @@ public class ClientService {
     public int deleteClientAccount(String id){
         var result = 0;
         if(!id.trim().isEmpty()){
-            Optional<Client> dbClient = Optional.ofNullable((Client)daoInterface.finById(id));
+            Optional<Client> dbClient = Optional.ofNullable((Client)daoInterface.findById(id));
             if(dbClient.isPresent()){
                 result = daoInterface.delete(id);
             }

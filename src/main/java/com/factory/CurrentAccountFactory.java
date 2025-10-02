@@ -12,7 +12,11 @@ public class CurrentAccountFactory implements BankAccountFactory {
         this.authorizedOverdraft = authorizedOverdraft;
     }
     @Override
-    public Account createAccount(String clientId, BigDecimal balance){
+    public Account createNewAccount(String clientId, BigDecimal balance){
         return new CurrentAccount(clientId,balance,authorizedOverdraft);
+    }
+    @Override
+    public Account createAccountFromDb(String accountId, String accountNumber,String clientId, BigDecimal balance){
+        return new CurrentAccount(accountId, accountNumber,clientId,balance,authorizedOverdraft);
     }
 }

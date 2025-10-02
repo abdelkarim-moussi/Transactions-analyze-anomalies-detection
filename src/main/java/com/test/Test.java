@@ -62,4 +62,27 @@ public class Test {
             e.printStackTrace();
         }
     }
+
+    public static void updateAccount(){
+
+        try {
+            int res = bankAccountService.updateBankAccount("ad432a85-8","030d20ef-1", BigDecimal.valueOf(20000),
+                    BigDecimal.valueOf(2000),0, AccountType.current_account);
+            if(res > 0){
+                System.out.println("account updated successfully");
+            }
+            else System.out.println("couldn't update account");
+
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteAccount(){
+        int res = bankAccountService.deleteBankAccount("ad432a85-8");
+        if(res > 0){
+            System.out.println("account deleted successfully");
+        }
+        else System.out.println("couldn't delete account");
+    }
 }

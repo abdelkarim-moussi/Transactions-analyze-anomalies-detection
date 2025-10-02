@@ -14,26 +14,27 @@ public sealed abstract class Account permits CurrentAccount , SavingAccount {
     protected String clientId;
     protected AccountType accountType;
 
-    public Account(){
-        this.setAccountNumber();
-        this.setAccountId();
-    }
-
     public Account(String clientId, BigDecimal balance){
-        this.setAccountNumber();
-        this.setAccountId();
+        this.accountNumber = Helper.generateCode("ACT-");
+        this.accountId = UUID.randomUUID().toString().substring(0,10);;
         this.balance = balance;
         this.clientId = clientId;
     }
 
+    public Account(String accountId,String accountNumber,String clientId, BigDecimal balance){
+        this.accountId = accountId;
+        this.accountNumber = accountNumber;
+        this.clientId = clientId;
+        this.balance = balance;
+    }
 
 
     public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber() {
-        this.accountNumber = Helper.generateCode("ACT-");
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public BigDecimal getBalance() {
@@ -48,14 +49,14 @@ public sealed abstract class Account permits CurrentAccount , SavingAccount {
         return accountType;
     }
 
-    public abstract void setAccountType();
+    public abstract void setAccountType(AccountType accountType);
 
     public String getAccountId(){
         return this.accountId;
     }
 
-    public void setAccountId(){
-        this.accountId = UUID.randomUUID().toString().substring(0,10);
+    public void setAccountId(String accountId){
+        this.accountId = accountId;
     }
 
     public String getClientId() {
