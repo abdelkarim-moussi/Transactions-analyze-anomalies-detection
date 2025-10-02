@@ -5,7 +5,6 @@ import main.java.com.dao.DAOInterface;
 import main.java.com.entity.client.Client;
 import main.java.com.util.Validator;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class ClientService {

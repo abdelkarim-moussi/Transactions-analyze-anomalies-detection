@@ -3,24 +3,31 @@ package main.java.com.entity.account;
 import main.java.com.entity.enums.AccountType;
 import main.java.com.util.Helper;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public sealed abstract class Account permits CurrentAccount , SavingAccount {
 
     protected String accountId;
     protected String accountNumber;
-    protected double balance = 0;
-    protected String ClientId;
+    protected BigDecimal balance = BigDecimal.valueOf(0);
+    protected String clientId;
     protected AccountType accountType;
 
-    Account(){
+    public Account(){
         this.setAccountNumber();
+        this.setAccountId();
     }
 
-    Account(double balance){
+    public Account(String clientId, BigDecimal balance){
         this.setAccountNumber();
+        this.setAccountId();
         this.balance = balance;
+        this.clientId = clientId;
     }
+
+
+
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -29,11 +36,11 @@ public sealed abstract class Account permits CurrentAccount , SavingAccount {
         this.accountNumber = Helper.generateCode("ACT-");
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -52,11 +59,11 @@ public sealed abstract class Account permits CurrentAccount , SavingAccount {
     }
 
     public String getClientId() {
-        return ClientId;
+        return clientId;
     }
 
     public void setClientId(String clientId) {
-        ClientId = clientId;
+        clientId = clientId;
     }
 
 }

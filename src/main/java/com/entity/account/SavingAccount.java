@@ -2,6 +2,8 @@ package main.java.com.entity.account;
 
 import main.java.com.entity.enums.AccountType;
 
+import java.math.BigDecimal;
+
 final public class SavingAccount extends Account {
 
     private float interestRate;
@@ -10,8 +12,8 @@ final public class SavingAccount extends Account {
         this.setAccountType();
     }
 
-    SavingAccount(double balance, float interestRate){
-        super(balance);
+    public SavingAccount(String clientId,BigDecimal balance, float interestRate){
+        super(clientId,balance);
         this.interestRate = interestRate;
         this.setAccountType();
     }

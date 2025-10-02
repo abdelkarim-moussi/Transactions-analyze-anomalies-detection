@@ -2,8 +2,6 @@ package main.java.com.dao;
 
 import main.java.com.entity.client.Client;
 import main.java.com.util.DataBaseConnection;
-
-import java.lang.ref.Cleaner;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -82,15 +80,15 @@ private static Connection connection = DataBaseConnection.getConnection();
         if(!id.trim().isEmpty()){
 
             try{
-            var findOnePreparedStatement = connection.prepareStatement(findOneSql);
-            findOnePreparedStatement.setString(1,id);
-            var resultSet = findOnePreparedStatement.executeQuery();
+                var findOnePreparedStatement = connection.prepareStatement(findOneSql);
+                findOnePreparedStatement.setString(1,id);
+                var resultSet = findOnePreparedStatement.executeQuery();
 
-            while(resultSet.next()){
-                client = new Client(resultSet.getString("id"),
-                        resultSet.getString("number"),
-                        resultSet.getString("email"));
-            }
+                while(resultSet.next()){
+                    client = new Client(resultSet.getString("id"),
+                            resultSet.getString("number"),
+                            resultSet.getString("email"));
+                }
             }catch (SQLException e){
                 e.printStackTrace();
             }
@@ -101,7 +99,7 @@ private static Connection connection = DataBaseConnection.getConnection();
     }
 
     @Override
-    public List<Client> finAll(String id){
+    public List<Client> findAll(){
         return null;
     }
 }

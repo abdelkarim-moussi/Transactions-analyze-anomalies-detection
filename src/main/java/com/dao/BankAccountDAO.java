@@ -1,0 +1,73 @@
+package main.java.com.dao;
+
+import main.java.com.entity.account.Account;
+import main.java.com.entity.account.CurrentAccount;
+import main.java.com.entity.account.SavingAccount;
+import main.java.com.util.DataBaseConnection;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.List;
+
+public class BankAccountDAO implements DAOInterface<Account,String>{
+
+    private static Connection connection = DataBaseConnection.getConnection();
+
+    @Override
+    public List<Account> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public Account finById(String id) {
+        return null;
+    }
+
+    @Override
+    public int update(Account account) {
+        return 0;
+    }
+
+    @Override
+    public int create(Account account) {
+        ;
+        if(account != null){
+            var insertSql = "INSERT INTO bankaccounts (id, clientid,accountnumber, balance,type, authorizedoverdraft, interestrate) " +
+                    "VALUES(? , ?, ?, ?, ?, ?, ?)";
+            try{
+
+                var insertPreparedStatement = connection.prepareStatement(insertSql);
+                insertPreparedStatement.setString(1,account.getAccountId());
+                insertPreparedStatement.setString(2,account.getClientId());
+                insertPreparedStatement.setString(3,account.getAccountNumber());
+                insertPreparedStatement.setBigDecimal(4,account.getBalance());
+                insertPreparedStatement.setObject(5,account.getAccountType(),Types.OTHER);
+                if(account instanceof CurrentAccount currentAccount){
+                    insertPreparedStatement.setBigDecimal(6,currentAccount.getAuthorizedOverdraft());
+                }else insertPreparedStatement.setBigDecimal(6, BigDecimal.valueOf(0));
+
+                if (account instanceof SavingAccount savingAccount){
+                    insertPreparedStatement.setFloat(7,savingAccount.getInterestRate());
+                }else insertPreparedStatement.setFloat(7,0);
+
+                var rowResult = insertPreparedStatement.executeUpdate();
+                insertPreparedStatement.close();
+                return rowResult;
+
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+
+        }
+        return 0;
+    }
+
+    @Override
+    public int delete(String id) {
+        return 0;
+    }
+
+
+}
