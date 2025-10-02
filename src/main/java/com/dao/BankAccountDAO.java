@@ -3,6 +3,9 @@ package main.java.com.dao;
 import main.java.com.entity.account.Account;
 import main.java.com.entity.account.CurrentAccount;
 import main.java.com.entity.account.SavingAccount;
+import main.java.com.entity.enums.AccountType;
+import main.java.com.factory.BankAccountFactory;
+import main.java.com.factory.BankAccountFactoryProvider;
 import main.java.com.util.DataBaseConnection;
 
 import java.math.BigDecimal;
@@ -21,7 +24,24 @@ public class BankAccountDAO implements DAOInterface<Account,String>{
     }
 
     @Override
-    public Account finById(String id) {
+    public Account findById(String id) {
+        if(!id.trim().isEmpty()){
+            var findOneSql = "SELECT * FROM bankaccounts WHERE id = ?";
+            try(var findOnePreparedStatement = connection.prepareStatement(findOneSql)){
+                findOnePreparedStatement.setString(1,id);
+                var resultSet = findOnePreparedStatement.executeQuery();
+                if(resultSet.next()){
+                    BankAccountFactory factory = BankAccountFactoryProvider.getFactory(
+                            AccountType.valueOf(resultSet.getObject("type").toString()),
+                            resultSet.getBigDecimal("authorizedoverdraft"),
+                            resultSet.getFloat("interestrate")
+                    );
+                    return factory.createAccount(resultSet.getString("clientid"),resultSet.getBigDecimal("balance"));
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 
