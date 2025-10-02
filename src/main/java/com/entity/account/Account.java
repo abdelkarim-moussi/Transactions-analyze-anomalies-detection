@@ -57,6 +57,9 @@ public sealed abstract class Account permits CurrentAccount , SavingAccount {
     public void setAccountId(){
         this.accountId = UUID.randomUUID().toString().substring(0,10);
     }
+    public void setAccountId(String accountId){
+        this.accountId = accountId;
+    }
 
     public String getClientId() {
         return clientId;

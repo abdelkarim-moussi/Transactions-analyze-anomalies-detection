@@ -62,4 +62,19 @@ public class Test {
             e.printStackTrace();
         }
     }
+
+    public static void updateAccount(){
+
+        try {
+            int res = bankAccountService.updateBankAccount("ad432a85-8","030d20ef-1", BigDecimal.valueOf(1000),
+                    BigDecimal.valueOf(0),0, AccountType.current_account);
+            if(res > 0){
+                System.out.println("row inserted successfully");
+            }
+            else System.out.println("couldn't insert row");
+
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+    }
 }

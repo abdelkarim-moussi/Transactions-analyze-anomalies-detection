@@ -32,7 +32,7 @@ public class BankAccountService {
         && balance.compareTo(BigDecimal.valueOf(0)) == 1
         && accountType != null){
 
-            Optional<Client> dbClient = Optional.ofNullable((Client) clientDao.finById(clientId));
+            Optional<Client> dbClient = Optional.ofNullable((Client) clientDao.findById(clientId));
             if(dbClient == null) return 0;
             else {
                 BankAccountFactory factory = BankAccountFactoryProvider.getFactory(accountType,authorizedOverdraft,interestRate);
@@ -45,5 +45,37 @@ public class BankAccountService {
         }
 
         return 0;
+    }
+
+    public int updateBankAccount(String accountId,String clientId, BigDecimal balance,
+                                 BigDecimal authorizedOverdraft,float interestRate,
+                                 AccountType accountType){
+
+        if(accountId.trim().isEmpty()) return 0;
+        else {
+
+            Optional<Account> dbAccount = Optional.ofNullable((Account) bankAccountDao.findById(accountId));
+
+            if(dbAccount.isPresent()){
+                if(!clientId.trim().isEmpty()
+                        && balance.compareTo(BigDecimal.valueOf(0)) == 1
+                        && accountType != null){
+
+                    Optional<Client> dbClient = Optional.ofNullable((Client) clientDao.findById(clientId));
+                    if(!dbClient.isPresent()) return 0;
+                    else {
+                        BankAccountFactory factory = BankAccountFactoryProvider.getFactory(accountType,authorizedOverdraft,interestRate);
+                        Account newAccount = factory.createAccount(clientId,balance);
+                        newAccount.setAccountId(accountId);
+                        return bankAccountDao.update(newAccount);
+
+                    }
+
+                }
+            }
+        }
+
+        return 0;
+
     }
 }
