@@ -51,8 +51,12 @@ public class Test {
     public static void createAccount(){
 
         try {
-            bankAccountService.createBankAccount("030d20ef-1", BigDecimal.valueOf(1000),
+            int res = bankAccountService.createBankAccount("030d20ef-1", BigDecimal.valueOf(1000),
                     BigDecimal.valueOf(0),0, AccountType.saving_account);
+            if(res > 0){
+                System.out.println("row inserted successfully");
+            }
+            else System.out.println("couldn't insert row");
 
         }catch (NullPointerException e){
             e.printStackTrace();

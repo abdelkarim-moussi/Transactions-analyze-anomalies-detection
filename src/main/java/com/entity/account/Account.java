@@ -16,10 +16,12 @@ public sealed abstract class Account permits CurrentAccount , SavingAccount {
 
     public Account(){
         this.setAccountNumber();
+        this.setAccountId();
     }
 
     public Account(String clientId, BigDecimal balance){
         this.setAccountNumber();
+        this.setAccountId();
         this.balance = balance;
         this.clientId = clientId;
     }

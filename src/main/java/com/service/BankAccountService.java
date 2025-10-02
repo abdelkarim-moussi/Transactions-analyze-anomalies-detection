@@ -36,8 +36,9 @@ public class BankAccountService {
             if(dbClient == null) return 0;
             else {
                 BankAccountFactory factory = BankAccountFactoryProvider.getFactory(accountType,authorizedOverdraft,interestRate);
-                Account newCurrentAccount = factory.createAccount(clientId,balance);
-                System.out.println(newCurrentAccount);
+                Account newAccount = factory.createAccount(clientId,balance);
+                System.out.println(newAccount.getAccountId());
+                return bankAccountDao.create(newAccount);
 
             }
 
