@@ -8,6 +8,6 @@ public interface DAOInterface <T,ID>{
     public int delete(ID id);
     public int update(T t);
     public T finById(ID id);
-    public List<T> finAll(ID id);
+    public List<T> findAll();
 
 }

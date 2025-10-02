@@ -2,12 +2,8 @@ package main.java.com.factory;
 
 import main.java.com.entity.account.Account;
 
-public abstract class BankAccountFactory {
+import java.math.BigDecimal;
 
-    public Account create(){
-        Account account = createAccount();
-        return account;
-    }
-
-    protected abstract Account createAccount();
+public interface BankAccountFactory {
+    public abstract Account createAccount(String clientId, BigDecimal balance);
 }

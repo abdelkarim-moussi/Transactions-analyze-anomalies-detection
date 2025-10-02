@@ -14,15 +14,18 @@ public sealed abstract class Account permits CurrentAccount , SavingAccount {
     protected String clientId;
     protected AccountType accountType;
 
-    Account(){
+    public Account(){
         this.setAccountNumber();
     }
 
-    Account(String clientId, BigDecimal balance){
+    public Account(String clientId, BigDecimal balance){
         this.setAccountNumber();
         this.balance = balance;
         this.clientId = clientId;
     }
+
+
+
     public String getAccountNumber() {
         return accountNumber;
     }

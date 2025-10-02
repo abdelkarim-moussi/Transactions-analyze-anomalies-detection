@@ -1,10 +1,16 @@
 package main.java.com.test;
 
+import main.java.com.entity.enums.AccountType;
+import main.java.com.service.BankAccountService;
 import main.java.com.service.ClientService;
+
+import java.math.BigDecimal;
+import java.security.DigestException;
 
 public class Test {
 
     private static ClientService clientService = new ClientService();
+    private static BankAccountService bankAccountService = new BankAccountService();
 
     public static void createClientTest (){
         try{
@@ -36,6 +42,19 @@ public class Test {
                 System.out.println("client deleted succefully");
             }else System.out.println("couldn't delete client");
         }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+    }
+
+    //bank account
+
+    public static void createAccount(){
+
+        try {
+            bankAccountService.createBankAccount("030d20ef-1", BigDecimal.valueOf(1000),
+                    BigDecimal.valueOf(0),0, AccountType.saving_account);
+
+        }catch (NullPointerException e){
             e.printStackTrace();
         }
     }

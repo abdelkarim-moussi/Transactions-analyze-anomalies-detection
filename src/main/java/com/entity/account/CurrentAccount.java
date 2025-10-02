@@ -2,24 +2,26 @@ package main.java.com.entity.account;
 
 import main.java.com.entity.enums.AccountType;
 
+import java.math.BigDecimal;
+
 final public class CurrentAccount extends Account {
 
-    private double authorizedOverdraft;
+    private BigDecimal authorizedOverdraft;
 
     public CurrentAccount() {
         this.setAccountType();
     }
 
-    public CurrentAccount(double balance, double authorizedOverdraft) {
-        super(balance);
+    public CurrentAccount(String clientId,BigDecimal balance, BigDecimal authorizedOverdraft) {
+        super(clientId,balance);
         this.authorizedOverdraft = authorizedOverdraft;
         this.setAccountType();
     }
 
-    public double getAuthorizedOverdraft() {
+    public BigDecimal getAuthorizedOverdraft() {
         return authorizedOverdraft;
     }
-    public void setAuthorizedOverdraft(double authorizedOverdraft) {
+    public void setAuthorizedOverdraft(BigDecimal authorizedOverdraft) {
         this.authorizedOverdraft = authorizedOverdraft;
     }
 
