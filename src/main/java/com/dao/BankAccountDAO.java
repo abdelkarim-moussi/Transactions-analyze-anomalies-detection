@@ -37,7 +37,6 @@ public class BankAccountDAO implements DAOInterface<Account,String>{
                             resultSet.getFloat("interestrate")
                     );
                     Account account = factory.createAccountFromDb(resultSet.getString("id"),resultSet.getString("accountnumber"),resultSet.getString("clientid"),resultSet.getBigDecimal("balance"));
-//
                     return account;
                 }
             }catch (SQLException e){
@@ -114,6 +113,20 @@ public class BankAccountDAO implements DAOInterface<Account,String>{
 
     @Override
     public int delete(String id) {
+
+        if(id.trim().isEmpty()) return 0;
+        else {
+            var deleteSql = "DELETE FROM bankaccounts WHERE id = ?";
+            try{
+                var deletePreparedStatement = connection.prepareStatement(deleteSql);
+                deletePreparedStatement.setString(1,id);
+                var rowResult = deletePreparedStatement.executeUpdate();
+                return rowResult;
+
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
         return 0;
     }
 

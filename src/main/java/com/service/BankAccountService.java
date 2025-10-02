@@ -79,4 +79,17 @@ public class BankAccountService {
         return 0;
 
     }
+
+    public int deleteBankAccount(String id){
+        if(id.trim().isEmpty()) return 0;
+        else {
+            Optional<Account> dbAccount = Optional.ofNullable((Account) bankAccountDao.findById(id));
+
+            if(dbAccount.isPresent()){
+                return bankAccountDao.delete(id);
+            }
+        }
+
+        return 0;
+    }
 }
