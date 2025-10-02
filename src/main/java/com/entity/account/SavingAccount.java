@@ -8,14 +8,15 @@ final public class SavingAccount extends Account {
 
     private float interestRate;
 
-    public SavingAccount() {
-        this.setAccountType();
+    public SavingAccount(String accountId,String accountNumber,String clientId, BigDecimal balance,float interestRate) {
+        super(accountId,accountNumber,clientId,balance);
+        this.interestRate = interestRate;
     }
 
     public SavingAccount(String clientId,BigDecimal balance, float interestRate){
         super(clientId,balance);
         this.interestRate = interestRate;
-        this.setAccountType();
+        this.accountType = AccountType.saving_account;
     }
 
     public float getInterestRate(){
@@ -27,13 +28,14 @@ final public class SavingAccount extends Account {
     }
 
     @Override
-    public void setAccountType(){
-        this.accountType = AccountType.saving_account;
+    public void setAccountType(AccountType accountType){
+        this.accountType = accountType;
     }
 
     @Override
     public String toString() {
         return "Account Details :" +
+                "\nid = "+ this.getAccountId()+
                 "\ncode = " + accountNumber +
                 "\naccountType = " + accountType +
                 "\nbalance = " + balance +

@@ -8,14 +8,15 @@ final public class CurrentAccount extends Account {
 
     private BigDecimal authorizedOverdraft;
 
-    public CurrentAccount() {
-        this.setAccountType();
+    public CurrentAccount(String accountId,String accountNumber,String clientId, BigDecimal balance, BigDecimal authorizedOverdraft) {
+        super(accountId,accountNumber,clientId,balance);
+        this.authorizedOverdraft = authorizedOverdraft;
     }
 
     public CurrentAccount(String clientId,BigDecimal balance, BigDecimal authorizedOverdraft) {
         super(clientId,balance);
         this.authorizedOverdraft = authorizedOverdraft;
-        this.setAccountType();
+        this.accountType = AccountType.current_account;
     }
 
     public BigDecimal getAuthorizedOverdraft() {
@@ -26,13 +27,14 @@ final public class CurrentAccount extends Account {
     }
 
     @Override
-    public void setAccountType(){
-        this.accountType = AccountType.current_account;
+    public void setAccountType(AccountType accountType){
+        this.accountType = accountType;
     }
 
     @Override
     public String toString() {
         return "Account Details :" +
+                "\nid = "+ this.getAccountId()+
                 "\ncode = " + accountNumber +
                 "\naccountType = " + accountType +
                 "\nbalance = " + balance +

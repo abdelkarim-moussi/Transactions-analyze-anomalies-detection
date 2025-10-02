@@ -36,7 +36,9 @@ public class BankAccountDAO implements DAOInterface<Account,String>{
                             resultSet.getBigDecimal("authorizedoverdraft"),
                             resultSet.getFloat("interestrate")
                     );
-                    return factory.createAccount(resultSet.getString("clientid"),resultSet.getBigDecimal("balance"));
+                    Account account = factory.createAccountFromDb(resultSet.getString("id"),resultSet.getString("accountnumber"),resultSet.getString("clientid"),resultSet.getBigDecimal("balance"));
+//
+                    return account;
                 }
             }catch (SQLException e){
                 e.printStackTrace();
@@ -46,13 +48,7 @@ public class BankAccountDAO implements DAOInterface<Account,String>{
     }
 
     @Override
-    public int update(Account account) {
-        return 0;
-    }
-
-    @Override
     public int create(Account account) {
-        ;
         if(account != null){
             var insertSql = "INSERT INTO bankaccounts (id, clientid,accountnumber, balance,type, authorizedoverdraft, interestrate) " +
                     "VALUES(? , ?, ?, ?, ?, ?, ?)";
@@ -83,6 +79,38 @@ public class BankAccountDAO implements DAOInterface<Account,String>{
         }
         return 0;
     }
+
+    @Override
+    public int update(Account account) {
+        if(account != null){
+            var updateSql = "UPDATE bankaccounts SET clientid = ?, balance = ?,type = ?, authorizedoverdraft = ?, interestrate = ? WHERE id = ?";
+            try{
+
+                var updatePreparedStatement = connection.prepareStatement(updateSql);
+                updatePreparedStatement.setString(1,account.getClientId());
+                updatePreparedStatement.setBigDecimal(2,account.getBalance());
+                updatePreparedStatement.setObject(3,account.getAccountType(),Types.OTHER);
+                updatePreparedStatement.setString(6, account.getAccountId());
+                if(account instanceof CurrentAccount currentAccount){
+                    updatePreparedStatement.setBigDecimal(4,currentAccount.getAuthorizedOverdraft());
+                }else updatePreparedStatement.setBigDecimal(4, BigDecimal.valueOf(0));
+
+                if (account instanceof SavingAccount savingAccount){
+                    updatePreparedStatement.setFloat(5,savingAccount.getInterestRate());
+                }else updatePreparedStatement.setFloat(5,0);
+
+                var rowResult = updatePreparedStatement.executeUpdate();
+                updatePreparedStatement.close();
+                return rowResult;
+
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+
+        }
+        return 0;
+    }
+
 
     @Override
     public int delete(String id) {

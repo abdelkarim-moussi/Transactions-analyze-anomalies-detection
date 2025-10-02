@@ -8,8 +8,6 @@ import main.java.com.entity.client.Client;
 import main.java.com.entity.enums.AccountType;
 import main.java.com.factory.BankAccountFactory;
 import main.java.com.factory.BankAccountFactoryProvider;
-import main.java.com.factory.CurrentAccountFactory;
-import main.java.com.factory.SavingAccountFactory;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -36,7 +34,7 @@ public class BankAccountService {
             if(dbClient == null) return 0;
             else {
                 BankAccountFactory factory = BankAccountFactoryProvider.getFactory(accountType,authorizedOverdraft,interestRate);
-                Account newAccount = factory.createAccount(clientId,balance);
+                Account newAccount = factory.createNewAccount(clientId,balance);
                 System.out.println(newAccount.getAccountId());
                 return bankAccountDao.create(newAccount);
 
@@ -65,8 +63,11 @@ public class BankAccountService {
                     if(!dbClient.isPresent()) return 0;
                     else {
                         BankAccountFactory factory = BankAccountFactoryProvider.getFactory(accountType,authorizedOverdraft,interestRate);
-                        Account newAccount = factory.createAccount(clientId,balance);
+                        Account newAccount = factory.createNewAccount(clientId,balance);
                         newAccount.setAccountId(accountId);
+//                        System.out.println(dbAccount.get().getAccountNumber());
+                        newAccount.setAccountNumber(dbAccount.get().getAccountNumber());
+                        System.out.println(newAccount);
                         return bankAccountDao.update(newAccount);
 
                     }
