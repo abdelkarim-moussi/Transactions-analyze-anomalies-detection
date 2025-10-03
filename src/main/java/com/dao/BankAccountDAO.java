@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BankAccountDAO implements DAOInterface<Account,String>{
@@ -20,7 +21,34 @@ public class BankAccountDAO implements DAOInterface<Account,String>{
 
     @Override
     public List<Account> findAll() {
-        return List.of();
+
+        var findAllSql = "SELECT * FROM bankaccounts";
+        List<Account> bankAccounts = new ArrayList<>();
+
+        try(var findAllStatement = connection.createStatement()){
+
+            var resultSet = findAllStatement.executeQuery(findAllSql);
+
+            while(resultSet.next()){
+                BankAccountFactory factory = BankAccountFactoryProvider.getFactory(
+                        AccountType.valueOf(resultSet.getObject("type").toString()),
+                        resultSet.getBigDecimal("authorizedoverdraft"),
+                        resultSet.getFloat("interestRate")
+                );
+                Account account = factory.createAccountFromDb(
+                        resultSet.getString("id"),
+                        resultSet.getString("accountnumber"),
+                        AccountType.valueOf(resultSet.getObject("type").toString()),
+                        resultSet.getString("clientid"),
+                        resultSet.getBigDecimal("balance")
+                );
+
+                bankAccounts.add(account);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return bankAccounts;
     }
 
     @Override
@@ -36,7 +64,12 @@ public class BankAccountDAO implements DAOInterface<Account,String>{
                             resultSet.getBigDecimal("authorizedoverdraft"),
                             resultSet.getFloat("interestrate")
                     );
-                    Account account = factory.createAccountFromDb(resultSet.getString("id"),resultSet.getString("accountnumber"),resultSet.getString("clientid"),resultSet.getBigDecimal("balance"));
+                    Account account = factory.createAccountFromDb(
+                            resultSet.getString("id"),
+                            resultSet.getString("accountnumber"),
+                            AccountType.valueOf(resultSet.getObject("type").toString()),
+                            resultSet.getString("clientid"),
+                            resultSet.getBigDecimal("balance"));
                     return account;
                 }
             }catch (SQLException e){

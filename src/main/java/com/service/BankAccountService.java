@@ -10,7 +10,13 @@ import main.java.com.factory.BankAccountFactory;
 import main.java.com.factory.BankAccountFactoryProvider;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BankAccountService {
 
@@ -91,5 +97,55 @@ public class BankAccountService {
         }
 
         return 0;
+    }
+
+    public Map<String,Account> getAllBankAccounts(){
+
+        List<Account> dbAccounts = bankAccountDao.findAll();
+        Map<String,Account> accounts = new HashMap<>();
+
+        for (Account account : dbAccounts) {
+            accounts.put(account.getAccountId(),account);
+        }
+
+        return accounts;
+    }
+
+    public Map<String,Account> getAccountsByNumberOrClient(String accountNumber,String clientId){
+
+        List<Account> dbAccounts = bankAccountDao.findAll();
+        Map<String,Account> accountsMap = new HashMap<>();
+
+        if(!accountNumber.trim().isEmpty()){
+            accountsMap = dbAccounts.stream().
+                    filter(a->a.getAccountNumber().equals(accountNumber))
+                    .collect(Collectors.toMap(Account::getAccountId, Function.identity()));
+        }else if(!clientId.trim().isEmpty()){
+            accountsMap = dbAccounts.stream().
+                    filter(a->a.getClientId().equals(clientId))
+                    .collect(Collectors.toMap(Account::getAccountId, Function.identity()));
+
+        }
+
+        return accountsMap;
+
+    }
+
+    public Map<String,Account> getAccountWithMaxAndMinBalance(){
+        List<Account> dbAccounts = bankAccountDao.findAll();
+        Map<String,Account> maxMinAccounts = new HashMap<>();
+
+            Optional<Account> accountWithMaxBalance = dbAccounts.stream().
+                    max((ac1,ac2)-> ac1.getBalance().compareTo(ac2.getBalance()))
+                    .stream().findFirst();
+
+            Optional<Account> accountWithMinBalance = dbAccounts.stream().
+                    min((ac1,ac2)-> ac1.getBalance().compareTo(ac2.getBalance()))
+                    .stream().findFirst();
+
+        accountWithMinBalance.ifPresent(account -> maxMinAccounts.put("MinBalanceAccount", account));
+        accountWithMaxBalance.ifPresent(account -> maxMinAccounts.put("MaxBalanceAccount", account));
+
+        return maxMinAccounts;
     }
 }

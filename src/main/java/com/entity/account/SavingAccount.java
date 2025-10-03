@@ -8,9 +8,10 @@ final public class SavingAccount extends Account {
 
     private float interestRate;
 
-    public SavingAccount(String accountId,String accountNumber,String clientId, BigDecimal balance,float interestRate) {
+    public SavingAccount(String accountId,String accountNumber,AccountType accountType,String clientId, BigDecimal balance,float interestRate) {
         super(accountId,accountNumber,clientId,balance);
         this.interestRate = interestRate;
+        this.accountType = accountType;
     }
 
     public SavingAccount(String clientId,BigDecimal balance, float interestRate){
