@@ -10,6 +10,9 @@ import main.java.com.factory.BankAccountFactory;
 import main.java.com.factory.BankAccountFactoryProvider;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class BankAccountService {
@@ -91,5 +94,17 @@ public class BankAccountService {
         }
 
         return 0;
+    }
+
+    public Map<String,Account> getALlBankAccounts(){
+
+        List<Account> dbAccounts = bankAccountDao.findAll();
+        Map<String,Account> accounts = new HashMap<>();
+
+        for (Account account : dbAccounts) {
+            accounts.put(account.getAccountId(),account);
+        }
+
+        return accounts;
     }
 }
