@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class ClientService {
-    private final DAOInterface daoInterface;
+    private final DAOInterface clientDao;
     public ClientService(){
-         daoInterface = new ClientDAO();
+         clientDao = new ClientDAO();
     }
 
     public int createClientAccount(String number, String email){
@@ -24,7 +24,7 @@ public class ClientService {
 
         if(!validNumber.trim().isEmpty() && !validEmail.trim().isEmpty()){
             Client client = new Client(validNumber,validEmail);
-            result = daoInterface.create(client);
+            result = clientDao.create(client);
         }
 
         return result;
@@ -36,11 +36,11 @@ public class ClientService {
         var result = 0;
 
         if(!id.trim().isEmpty()){
-            Optional<Client> dbClient = (Optional.ofNullable((Client) daoInterface.findById(id)));
+            Optional<Client> dbClient = (Optional.ofNullable((Client) clientDao.findById(id)));
             if(dbClient.isPresent()){
                 if(!validNewNumber.trim().isEmpty() && !validNewEmail.trim().isEmpty()){
                     Client client = new Client(dbClient.get().id(),validNewNumber,validNewEmail);
-                    result = daoInterface.update(client);
+                    result = clientDao.update(client);
                 }
             }
         }
@@ -51,9 +51,9 @@ public class ClientService {
     public int deleteClientAccount(String id){
         var result = 0;
         if(!id.trim().isEmpty()){
-            Optional<Client> dbClient = Optional.ofNullable((Client)daoInterface.findById(id));
+            Optional<Client> dbClient = Optional.ofNullable((Client)clientDao.findById(id));
             if(dbClient.isPresent()){
-                result = daoInterface.delete(id);
+                result = clientDao.delete(id);
             }
         }
 
@@ -62,7 +62,7 @@ public class ClientService {
 
     public List<Client>  getClientByIdOrName(String id, String email){
 
-        List<Client> clients = daoInterface.findAll();
+        List<Client> clients = clientDao.findAll();
         List<Client> filtredClients = new ArrayList<>();
 
         if(!id.trim().isEmpty()){
@@ -78,7 +78,7 @@ public class ClientService {
     }
 
     public List<Client> getAllClients(){
-        List<Client> clients = daoInterface.findAll();
+        List<Client> clients = clientDao.findAll();
         List<Client> filteredClients = clients.stream().
                 sorted((c1,c2)->c1.email().compareTo(c2.email()))
                 .toList();
