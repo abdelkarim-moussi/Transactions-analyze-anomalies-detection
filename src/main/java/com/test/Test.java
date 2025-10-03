@@ -56,8 +56,8 @@ public class Test {
     public static void createAccount(){
 
         try {
-            int res = bankAccountService.createBankAccount("030d20ef-1", BigDecimal.valueOf(1000),
-                    BigDecimal.valueOf(0),0, AccountType.saving_account);
+            int res = bankAccountService.createBankAccount("030d20ef-1", BigDecimal.valueOf(30000),
+                    BigDecimal.valueOf(0),10, AccountType.saving_account);
             if(res > 0){
                 System.out.println("row inserted successfully");
             }
@@ -120,5 +120,9 @@ public class Test {
             System.out.println(accountMap);
         }else System.out.println("there is no accounts with this search terms");
 
+    }
+
+    public static void displayMaxMinAccount(){
+        System.out.println(bankAccountService.getAccountWithMaxAndMinBalance());
     }
 }

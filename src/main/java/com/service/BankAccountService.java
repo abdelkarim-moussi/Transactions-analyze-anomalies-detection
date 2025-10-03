@@ -130,4 +130,22 @@ public class BankAccountService {
         return accountsMap;
 
     }
+
+    public Map<String,Account> getAccountWithMaxAndMinBalance(){
+        List<Account> dbAccounts = bankAccountDao.findAll();
+        Map<String,Account> maxMinAccounts = new HashMap<>();
+
+            Optional<Account> accountWithMaxBalance = dbAccounts.stream().
+                    max((ac1,ac2)-> ac1.getBalance().compareTo(ac2.getBalance()))
+                    .stream().findFirst();
+
+            Optional<Account> accountWithMinBalance = dbAccounts.stream().
+                    min((ac1,ac2)-> ac1.getBalance().compareTo(ac2.getBalance()))
+                    .stream().findFirst();
+
+        accountWithMinBalance.ifPresent(account -> maxMinAccounts.put("MinBalanceAccount", account));
+        accountWithMaxBalance.ifPresent(account -> maxMinAccounts.put("MaxBalanceAccount", account));
+
+        return maxMinAccounts;
+    }
 }
