@@ -47,7 +47,20 @@ public class TransactionDAO implements DAOInterface<Transaction,String>{
     }
 
     @Override
-    public int delete(String s) {
+    public int delete(String id) {
+        if(id.trim().isEmpty()) return 0;
+        else{
+            var deleteSql = "DELETE FROM transactions WHERE id = ?";
+
+            try(var deletePreparedStatement = connection.prepareStatement(deleteSql)){
+
+                deletePreparedStatement.setString(1,id);
+                var rowResult = deletePreparedStatement.executeUpdate();
+                return rowResult;
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
         return 0;
     }
 
