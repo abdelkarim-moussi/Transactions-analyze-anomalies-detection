@@ -1,11 +1,14 @@
 package main.java.com.test;
 
+import main.java.com.entity.client.Client;
 import main.java.com.entity.enums.AccountType;
 import main.java.com.service.BankAccountService;
 import main.java.com.service.ClientService;
 
 import java.math.BigDecimal;
 import java.security.DigestException;
+import java.util.List;
+import java.util.Optional;
 
 public class Test {
 
@@ -84,5 +87,21 @@ public class Test {
             System.out.println("account deleted successfully");
         }
         else System.out.println("couldn't delete account");
+    }
+
+    public static void foundClients(){
+        List<Client> clients = clientService.getClientByIdOrName("030d20ef-1","");
+        if(!clients.isEmpty()){
+            System.out.println(clients);
+        }else System.out.println("there is no client with this data");
+    }
+
+    public static void listAllCLients(){
+        clientService.getAllClients().forEach(c-> System.out.println(
+                "\nId : "+c.id() +
+                "\nNumber : "+c.number() +
+                "\nEmail : "+c.email()+
+                "\n-------------------------------------------\n"
+        ));
     }
 }

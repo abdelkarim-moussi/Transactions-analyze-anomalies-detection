@@ -4,6 +4,7 @@ import main.java.com.entity.client.Client;
 import main.java.com.util.DataBaseConnection;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientDAO implements DAOInterface<Client,String>{
@@ -75,7 +76,7 @@ private static Connection connection = DataBaseConnection.getConnection();
 
     @Override
     public Client findById(String id){
-        Client client = null;
+
         var findOneSql = "SELECT * FROM clients WHERE id= ?";
         if(!id.trim().isEmpty()){
 
@@ -85,14 +86,14 @@ private static Connection connection = DataBaseConnection.getConnection();
                 var resultSet = findOnePreparedStatement.executeQuery();
 
                 while(resultSet.next()){
-                    client = new Client(resultSet.getString("id"),
+                    Client client = new Client(resultSet.getString("id"),
                             resultSet.getString("number"),
                             resultSet.getString("email"));
+                    return client;
                 }
             }catch (SQLException e){
                 e.printStackTrace();
             }
-            return client;
 
         }
         return null;
@@ -100,6 +101,21 @@ private static Connection connection = DataBaseConnection.getConnection();
 
     @Override
     public List<Client> findAll(){
-        return null;
+        var findAllSql = "SELECT * FROM clients";
+        List<Client> clients = new ArrayList<>();
+        try(var findAllStatement = connection.createStatement()){
+
+            var resultSet = findAllStatement.executeQuery(findAllSql);
+            while(resultSet.next()){
+                Client client = new Client(resultSet.getString("id"),resultSet.getString("number"),
+                        resultSet.getString("email"));
+                clients.add(client);
+
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return clients;
     }
 }
