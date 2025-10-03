@@ -96,13 +96,13 @@ public class Test {
     }
 
     public static void foundClients(){
-        List<Client> clients = clientService.getClientByIdOrName("030d20ef-1","");
+        List<Client> clients = clientService.getClientByIdOrEmail("030d20ef-1","");
         if(!clients.isEmpty()){
             System.out.println(clients);
         }else System.out.println("there is no client with this data");
     }
 
-    public static void listAllCLients(){
+    public static void listAllClients(){
         clientService.getAllClients().forEach(c-> System.out.println(
                 "\nId : "+c.id() +
                 "\nNumber : "+c.number() +
@@ -133,7 +133,7 @@ public class Test {
 
 
     //Transactions
-    public static void makePayment(){
+    public static void makeTransaction(){
         var res = transactionService.makeTransaction(BigDecimal.valueOf(4000),
                 TransactionType.deposit,"bank","f504a3b0-f");
         if(res > 0){

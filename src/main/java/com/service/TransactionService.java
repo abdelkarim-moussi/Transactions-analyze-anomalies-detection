@@ -63,9 +63,7 @@ public class TransactionService {
     public List<Transaction> getTransactionsByAccount(String accountId){
 
         List<Transaction> dbTransactions = transactionDao.findAll();
-        List<Account> dbAccounts = bankAccountDao.findAll();
         List<Transaction> filteredTransactions = new ArrayList<>();
-
 
        if(!accountId.trim().isEmpty()) {
                 filteredTransactions = dbTransactions.stream().
@@ -185,6 +183,11 @@ public class TransactionService {
         totalAvg.put("Avg",avg);
 
         return totalAvg;
+    }
+
+    public List<Transaction> detectSuspiciousTransactions(){
+
+        return List.of();
     }
 
 }

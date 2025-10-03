@@ -60,7 +60,7 @@ public class ClientService {
         return result;
     }
 
-    public List<Client>  getClientByIdOrName(String id, String email){
+    public List<Client>  getClientByIdOrEmail(String id, String email){
 
         List<Client> clients = clientDao.findAll();
         List<Client> filtredClients = new ArrayList<>();
