@@ -66,6 +66,7 @@ public class TransactionService {
        if(!accountId.trim().isEmpty()) {
                 filteredTransactions = dbTransactions.stream().
                         filter(t -> t.accountId().equals(accountId))
+                        .sorted((t1,t2) -> t1.date().compareTo(t2.date()))
                         .toList();
         }
 
