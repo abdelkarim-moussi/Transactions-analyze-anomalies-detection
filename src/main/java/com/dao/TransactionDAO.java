@@ -8,17 +8,66 @@ import main.java.com.util.Helper;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TransactionDAO implements DAOInterface<Transaction,String>{
     private static Connection connection = DataBaseConnection.getConnection();
     @Override
     public List<Transaction> findAll() {
-        return List.of();
+
+        List<Transaction> transactions =  new ArrayList<>();
+
+        var findAllSql = "SELECT * FROM transactions";
+        try(var findAllStatement = connection.createStatement()){
+            var resultSet = findAllStatement.executeQuery(findAllSql);
+
+            while(resultSet.next()){
+                Transaction transaction = new Transaction(
+                        resultSet.getString("id"),
+                        resultSet.getTimestamp("date").toLocalDateTime(),
+                        resultSet.getBigDecimal("amount"),
+                        TransactionType.valueOf(resultSet.getObject("type").toString()),
+                        resultSet.getString("place"),
+                        resultSet.getString("accountid")
+                );
+                transactions.add(transaction);
+
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return transactions;
     }
 
     @Override
-    public Transaction findById(String s) {
+    public Transaction findById(String id) {
+
+        if(id.trim().isEmpty()) return null;
+        else {
+            var findOneSql = "SELECT * FROM transactions WHERE id = ?";
+
+            try(var findOnePreparedStatement = connection.prepareStatement(findOneSql)){
+
+                findOnePreparedStatement.setString(1,id);
+                var resultSet = findOnePreparedStatement.executeQuery();
+
+                if(resultSet.next()){
+                    return new Transaction(resultSet.getString("id"),
+                            resultSet.getTimestamp("date").toLocalDateTime(),
+                            resultSet.getBigDecimal("amount"),
+                            TransactionType.valueOf(resultSet.getObject("type").toString()),
+                            resultSet.getString("place"),
+                            resultSet.getString("accountid")
+                    );
+                }
+
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 
