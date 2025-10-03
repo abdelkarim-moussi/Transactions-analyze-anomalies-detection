@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BankAccountService {
 
@@ -96,7 +99,7 @@ public class BankAccountService {
         return 0;
     }
 
-    public Map<String,Account> getALlBankAccounts(){
+    public Map<String,Account> getAllBankAccounts(){
 
         List<Account> dbAccounts = bankAccountDao.findAll();
         Map<String,Account> accounts = new HashMap<>();
@@ -106,5 +109,25 @@ public class BankAccountService {
         }
 
         return accounts;
+    }
+
+    public Map<String,Account> getAccountsByNumberOrClient(String accountNumber,String clientId){
+
+        List<Account> dbAccounts = bankAccountDao.findAll();
+        Map<String,Account> accountsMap = new HashMap<>();
+
+        if(!accountNumber.trim().isEmpty()){
+            accountsMap = dbAccounts.stream().
+                    filter(a->a.getAccountNumber().equals(accountNumber))
+                    .collect(Collectors.toMap(Account::getAccountId, Function.identity()));
+        }else if(!clientId.trim().isEmpty()){
+            accountsMap = dbAccounts.stream().
+                    filter(a->a.getClientId().equals(clientId))
+                    .collect(Collectors.toMap(Account::getAccountId, Function.identity()));
+
+        }
+
+        return accountsMap;
+
     }
 }

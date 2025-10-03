@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 public class BankAccountFactoryProvider {
 
     public static BankAccountFactory getFactory(AccountType accountType,
-                                                BigDecimal authorizedOverdraft, float interestRate){
+                                                BigDecimal authorizedOverdraft,
+                                                float interestRate){
         return switch (accountType){
             case current_account -> new CurrentAccountFactory(authorizedOverdraft);
             case saving_account -> new SavingAccountFactory(interestRate);

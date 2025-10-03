@@ -8,9 +8,10 @@ final public class CurrentAccount extends Account {
 
     private BigDecimal authorizedOverdraft;
 
-    public CurrentAccount(String accountId,String accountNumber,String clientId, BigDecimal balance, BigDecimal authorizedOverdraft) {
+    public CurrentAccount(String accountId,String accountNumber,AccountType accountType,String clientId, BigDecimal balance, BigDecimal authorizedOverdraft) {
         super(accountId,accountNumber,clientId,balance);
         this.authorizedOverdraft = authorizedOverdraft;
+        this.accountType = accountType;
     }
 
     public CurrentAccount(String clientId,BigDecimal balance, BigDecimal authorizedOverdraft) {

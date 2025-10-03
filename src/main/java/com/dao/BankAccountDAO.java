@@ -13,9 +13,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BankAccountDAO implements DAOInterface<Account,String>{
 
@@ -34,12 +32,13 @@ public class BankAccountDAO implements DAOInterface<Account,String>{
             while(resultSet.next()){
                 BankAccountFactory factory = BankAccountFactoryProvider.getFactory(
                         AccountType.valueOf(resultSet.getObject("type").toString()),
-                        resultSet.getBigDecimal("authorizedwithdraft"),
+                        resultSet.getBigDecimal("authorizedoverdraft"),
                         resultSet.getFloat("interestRate")
                 );
                 Account account = factory.createAccountFromDb(
                         resultSet.getString("id"),
                         resultSet.getString("accountnumber"),
+                        AccountType.valueOf(resultSet.getObject("type").toString()),
                         resultSet.getString("clientid"),
                         resultSet.getBigDecimal("balance")
                 );
@@ -65,7 +64,12 @@ public class BankAccountDAO implements DAOInterface<Account,String>{
                             resultSet.getBigDecimal("authorizedoverdraft"),
                             resultSet.getFloat("interestrate")
                     );
-                    Account account = factory.createAccountFromDb(resultSet.getString("id"),resultSet.getString("accountnumber"),resultSet.getString("clientid"),resultSet.getBigDecimal("balance"));
+                    Account account = factory.createAccountFromDb(
+                            resultSet.getString("id"),
+                            resultSet.getString("accountnumber"),
+                            AccountType.valueOf(resultSet.getObject("type").toString()),
+                            resultSet.getString("clientid"),
+                            resultSet.getBigDecimal("balance"));
                     return account;
                 }
             }catch (SQLException e){
