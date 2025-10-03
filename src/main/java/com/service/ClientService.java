@@ -5,6 +5,9 @@ import main.java.com.dao.DAOInterface;
 import main.java.com.entity.client.Client;
 import main.java.com.util.Validator;
 
+import javax.swing.text.html.Option;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ClientService {
@@ -55,5 +58,30 @@ public class ClientService {
         }
 
         return result;
+    }
+
+    public List<Client>  getClientByIdOrName(String id, String email){
+
+        List<Client> clients = daoInterface.findAll();
+        List<Client> filtredClients = new ArrayList<>();
+
+        if(!id.trim().isEmpty()){
+             filtredClients = clients.stream().
+                    filter(c1->c1.id().equals(id))
+                     .toList();
+        }else if(!email.trim().isEmpty()){
+             filtredClients = clients.stream().filter(c1->c1.email().equals(email))
+             .toList();
+        }
+
+        return filtredClients;
+    }
+
+    public List<Client> getAllClients(){
+        List<Client> clients = daoInterface.findAll();
+        List<Client> filteredClients = clients.stream().
+                sorted((c1,c2)->c1.email().compareTo(c2.email()))
+                .toList();
+        return filteredClients;
     }
 }
