@@ -3,19 +3,21 @@ package main.java.com.test;
 import main.java.com.entity.account.Account;
 import main.java.com.entity.client.Client;
 import main.java.com.entity.enums.AccountType;
+import main.java.com.entity.enums.TransactionType;
+import main.java.com.entity.transaction.Transaction;
 import main.java.com.service.BankAccountService;
 import main.java.com.service.ClientService;
+import main.java.com.service.TransactionService;
 
 import java.math.BigDecimal;
-import java.security.DigestException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class Test {
 
     private static ClientService clientService = new ClientService();
     private static BankAccountService bankAccountService = new BankAccountService();
+    private static TransactionService transactionService = new TransactionService();
 
     public static void createClientTest (){
         try{
@@ -124,5 +126,23 @@ public class Test {
 
     public static void displayMaxMinAccount(){
         System.out.println(bankAccountService.getAccountWithMaxAndMinBalance());
+    }
+
+
+
+    //Transactions
+    public static void makePayment(){
+        var res = transactionService.makeTransaction(BigDecimal.valueOf(4000),
+                TransactionType.deposit,"bank","f504a3b0-f");
+        if(res > 0){
+            System.out.println("transaction successful");
+        } else System.out.println("failed");
+    }
+
+    public static void getTransactionsList(){
+        List<Transaction> transactions = transactionService.getTransactionsByClient("030d20ef-1");
+
+        if(transactions.isEmpty()) System.out.println("there is no transactions with the provided data");
+        else System.out.println(transactions);
     }
 }
