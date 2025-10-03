@@ -24,6 +24,25 @@ public class TransactionDAO implements DAOInterface<Transaction,String>{
 
     @Override
     public int update(Transaction transaction) {
+        var updateSql = "UPDATE transactions SET date = ?, amount = ?, type = ?, place = ? WHERE id = ?";
+        if(transaction != null){
+
+            try(var updatePreparedStatement = connection.prepareStatement(updateSql)){
+
+                updatePreparedStatement.setTimestamp(1, Helper.dateFormaterToDate(transaction.date()));
+                updatePreparedStatement.setBigDecimal(2,transaction.amount());
+                updatePreparedStatement.setObject(3, transaction.type(), Types.OTHER);
+                updatePreparedStatement.setString(4,transaction.place());
+                updatePreparedStatement.setString(5,transaction.transactionId());
+
+                var rowResult = updatePreparedStatement.executeUpdate();
+                return rowResult;
+
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+
+        }
         return 0;
     }
 
