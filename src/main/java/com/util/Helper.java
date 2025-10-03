@@ -1,5 +1,7 @@
 package main.java.com.util;
 import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Helper {
@@ -10,6 +12,10 @@ public class Helper {
         String uniqueCode = (pattern + new BigInteger(uniqueId,16)).substring(0,9);
 
         return uniqueCode;
+    }
+
+    public static Timestamp dateFormaterToDate(LocalDateTime date){
+        return java.sql.Timestamp.valueOf(date);
     }
 
 }
