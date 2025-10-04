@@ -7,13 +7,13 @@ import main.java.com.entity.account.Account;
 import main.java.com.entity.enums.TransactionType;
 import main.java.com.entity.transaction.Transaction;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
+
+import static java.util.stream.Collectors.groupingBy;
 
 public class TransactionService {
 
@@ -101,6 +101,25 @@ public class TransactionService {
 
 
         return filteredTransactions;
+
+    }
+
+    public Map<?, List<Transaction>> groupTransactions(String choice){
+
+        List<Transaction> transactions = transactionDao.findAll();
+        Map<?,List<Transaction>> groupedTransactions = new HashMap<>();
+        switch (choice){
+            case "date" : groupedTransactions = transactions.stream().
+                    collect(groupingBy(Transaction::date));
+                break;
+            case "type" : groupedTransactions = transactions.stream().
+                    collect(groupingBy(Transaction::type));
+                break;
+        }
+
+        System.out.println(groupedTransactions);
+
+        return groupedTransactions;
 
     }
 

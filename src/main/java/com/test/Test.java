@@ -164,4 +164,8 @@ public class Test {
 
         System.out.println("Transactions : "+transactions);
     }
+
+    public static void groupTransactions(){
+        transactionService.groupTransactions("date");
+    }
 }
