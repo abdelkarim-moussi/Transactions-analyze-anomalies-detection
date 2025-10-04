@@ -166,6 +166,17 @@ public class Test {
     }
 
     public static void groupTransactions(){
-        transactionService.groupTransactions("date");
+        Map<?,List<Transaction>> groupedTransactions = transactionService.groupTransactions("date");
+        if(!groupedTransactions.isEmpty()){
+            System.out.println(groupedTransactions);
+        }else System.out.println("There is no transactions to group");
+    }
+
+    public static void getTransactionsSumAmountByClient(){
+        System.out.println(transactionService.getTransactionsSumAvgAmountByClient("030d20ef-1"));
+    }
+
+    public static void getTransactionsSumAmountByAccount(){
+        System.out.println(transactionService.getTransactionsSumAvgAmountByAccount("030d20ef-1"));
     }
 }
