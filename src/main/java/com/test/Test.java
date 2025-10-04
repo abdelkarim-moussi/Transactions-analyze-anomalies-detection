@@ -10,6 +10,8 @@ import main.java.com.service.ClientService;
 import main.java.com.service.TransactionService;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -139,10 +141,27 @@ public class Test {
         } else System.out.println("failed");
     }
 
-    public static void getTransactionsList(){
+    public static void getTransactionsListByClient(){
         List<Transaction> transactions = transactionService.getTransactionsByClient("030d20ef-1");
 
         if(transactions.isEmpty()) System.out.println("there is no transactions with the provided data");
         else System.out.println(transactions);
+    }
+
+    public static void getTransactionsListByAccount(){
+        List<Transaction> transactions = transactionService.getTransactionsByAccount("ae3d3405-c");
+
+        if(transactions.isEmpty()) System.out.println("there is no transactions with the provided data");
+        else System.out.println(transactions);
+    }
+
+    public static void getTransactionsByFilter(){
+
+        List<Transaction> transactions = transactionService.getFilteredTransactions(
+                BigDecimal.valueOf(2000),TransactionType.transfer,
+                null,
+                "");
+
+        System.out.println("Transactions : "+transactions);
     }
 }

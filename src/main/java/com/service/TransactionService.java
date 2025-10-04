@@ -8,8 +8,11 @@ import main.java.com.entity.enums.TransactionType;
 import main.java.com.entity.transaction.Transaction;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public class TransactionService {
@@ -71,6 +74,34 @@ public class TransactionService {
         }
 
         return filteredTransactions;
+    }
+
+    public List<Transaction> getFilteredTransactions(BigDecimal amount, TransactionType transactionType,
+                                                     LocalDate date, String place){
+        List<Transaction> transactions = transactionDao.findAll();
+        List<Transaction> filteredTransactions = new ArrayList<>();
+
+        if(amount.compareTo(BigDecimal.valueOf(0)) == 1){
+            filteredTransactions = transactions.stream().
+                filter(t -> t.amount().equals(amount)).toList();
+        }
+        if(transactionType != null){
+            filteredTransactions = transactions.stream().
+                    filter(t -> t.type().equals(transactionType)).toList();
+        }
+        if (date != null){
+            filteredTransactions = transactions.stream().
+                    filter(t -> t.date().toLocalDate().isEqual(date)).toList();
+        }
+
+        if(!place.isEmpty()){
+            filteredTransactions = transactions.stream().
+                    filter(t -> t.place().equals(place)).toList();
+        }
+
+
+        return filteredTransactions;
+
     }
 
 }
