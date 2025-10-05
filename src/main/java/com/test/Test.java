@@ -10,6 +10,8 @@ import main.java.com.service.ClientService;
 import main.java.com.service.TransactionService;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -94,13 +96,13 @@ public class Test {
     }
 
     public static void foundClients(){
-        List<Client> clients = clientService.getClientByIdOrName("030d20ef-1","");
+        List<Client> clients = clientService.getClientByIdOrEmail("030d20ef-1","");
         if(!clients.isEmpty()){
             System.out.println(clients);
         }else System.out.println("there is no client with this data");
     }
 
-    public static void listAllCLients(){
+    public static void listAllClients(){
         clientService.getAllClients().forEach(c-> System.out.println(
                 "\nId : "+c.id() +
                 "\nNumber : "+c.number() +
@@ -131,7 +133,7 @@ public class Test {
 
 
     //Transactions
-    public static void makePayment(){
+    public static void makeTransaction(){
         var res = transactionService.makeTransaction(BigDecimal.valueOf(4000),
                 TransactionType.deposit,"bank","f504a3b0-f");
         if(res > 0){
@@ -139,10 +141,42 @@ public class Test {
         } else System.out.println("failed");
     }
 
-    public static void getTransactionsList(){
+    public static void getTransactionsListByClient(){
         List<Transaction> transactions = transactionService.getTransactionsByClient("030d20ef-1");
 
         if(transactions.isEmpty()) System.out.println("there is no transactions with the provided data");
         else System.out.println(transactions);
+    }
+
+    public static void getTransactionsListByAccount(){
+        List<Transaction> transactions = transactionService.getTransactionsByAccount("ae3d3405-c");
+
+        if(transactions.isEmpty()) System.out.println("there is no transactions with the provided data");
+        else System.out.println(transactions);
+    }
+
+    public static void getTransactionsByFilter(){
+
+        List<Transaction> transactions = transactionService.getFilteredTransactions(
+                BigDecimal.valueOf(2000),TransactionType.transfer,
+                null,
+                "");
+
+        System.out.println("Transactions : "+transactions);
+    }
+
+    public static void groupTransactions(){
+        Map<?,List<Transaction>> groupedTransactions = transactionService.groupTransactions("date");
+        if(!groupedTransactions.isEmpty()){
+            System.out.println(groupedTransactions);
+        }else System.out.println("There is no transactions to group");
+    }
+
+    public static void getTransactionsSumAmountByClient(){
+        System.out.println(transactionService.getTransactionsSumAvgAmountByClient("030d20ef-1"));
+    }
+
+    public static void getTransactionsSumAmountByAccount(){
+        System.out.println(transactionService.getTransactionsSumAvgAmountByAccount("030d20ef-1"));
     }
 }

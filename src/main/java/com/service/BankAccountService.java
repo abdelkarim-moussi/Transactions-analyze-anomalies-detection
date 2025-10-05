@@ -70,9 +70,7 @@ public class BankAccountService {
                         BankAccountFactory factory = BankAccountFactoryProvider.getFactory(accountType,authorizedOverdraft,interestRate);
                         Account newAccount = factory.createNewAccount(clientId,balance);
                         newAccount.setAccountId(accountId);
-//                        System.out.println(dbAccount.get().getAccountNumber());
                         newAccount.setAccountNumber(dbAccount.get().getAccountNumber());
-                        System.out.println(newAccount);
                         return bankAccountDao.update(newAccount);
 
                     }

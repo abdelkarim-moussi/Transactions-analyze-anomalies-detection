@@ -7,10 +7,13 @@ import main.java.com.entity.account.Account;
 import main.java.com.entity.enums.TransactionType;
 import main.java.com.entity.transaction.Transaction;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+
+import static java.util.stream.Collectors.groupingBy;
 
 public class TransactionService {
 
@@ -50,6 +53,7 @@ public class TransactionService {
         for (Account account : clientAccounts) {
             filteredTransactions.add(dbTransactions.stream().
                     filter(t -> t.accountId().equals(account.getAccountId()))
+                    .sorted((t1,t2) -> t1.date().compareTo(t2.date()))
                     .findFirst().get());
         }
 
@@ -59,9 +63,7 @@ public class TransactionService {
     public List<Transaction> getTransactionsByAccount(String accountId){
 
         List<Transaction> dbTransactions = transactionDao.findAll();
-        List<Account> dbAccounts = bankAccountDao.findAll();
         List<Transaction> filteredTransactions = new ArrayList<>();
-
 
        if(!accountId.trim().isEmpty()) {
                 filteredTransactions = dbTransactions.stream().
@@ -71,6 +73,121 @@ public class TransactionService {
         }
 
         return filteredTransactions;
+    }
+
+    public List<Transaction> getFilteredTransactions(BigDecimal amount, TransactionType transactionType,
+                                                     LocalDate date, String place){
+        List<Transaction> transactions = transactionDao.findAll();
+        List<Transaction> filteredTransactions = new ArrayList<>();
+
+        if(amount.compareTo(BigDecimal.valueOf(0)) == 1){
+            filteredTransactions = transactions.stream().
+                filter(t -> t.amount().equals(amount)).toList();
+        }
+        if(transactionType != null){
+            filteredTransactions = transactions.stream().
+                    filter(t -> t.type().equals(transactionType)).toList();
+        }
+        if (date != null){
+            filteredTransactions = transactions.stream().
+                    filter(t -> t.date().toLocalDate().isEqual(date)).toList();
+        }
+
+        if(!place.isEmpty()){
+            filteredTransactions = transactions.stream().
+                    filter(t -> t.place().equals(place)).toList();
+        }
+
+
+        return filteredTransactions;
+
+    }
+
+    public Map<?, List<Transaction>> groupTransactions(String choice){
+
+        List<Transaction> transactions = transactionDao.findAll();
+        Map<?,List<Transaction>> groupedTransactions = new HashMap<>();
+        switch (choice){
+            case "date" : groupedTransactions = transactions.stream().
+                    collect(groupingBy(Transaction::date));
+                break;
+            case "type" : groupedTransactions = transactions.stream().
+                    collect(groupingBy(Transaction::type));
+                break;
+        }
+
+        return groupedTransactions;
+
+    }
+
+    public Map<String,BigDecimal> getTransactionsSumAvgAmountByClient(String clientId){
+
+        List<Transaction> dbTransactions = transactionDao.findAll();
+        List<Account> dbAccounts = bankAccountDao.findAll();
+        List<Transaction> filteredTransactions = new ArrayList<>();
+
+        List<Account> clientAccounts = dbAccounts.stream().filter(a -> a.getClientId().equals(clientId))
+                .toList();
+
+        BigDecimal total = BigDecimal.valueOf(0);
+        BigDecimal avg = BigDecimal.valueOf(0);
+
+        for (Account account : clientAccounts) {
+            filteredTransactions.add(dbTransactions.stream().
+                    filter(t -> t.accountId().equals(account.getAccountId()))
+                    .sorted((t1,t2) -> t1.date().compareTo(t2.date()))
+                    .findFirst().get());
+        }
+
+        total = BigDecimal.valueOf(filteredTransactions.stream().
+                map(transaction -> transaction.amount()).
+                mapToDouble(BigDecimal::doubleValue).sum());
+
+        avg = BigDecimal.valueOf(filteredTransactions.stream().
+                map(transaction -> transaction.amount()).
+                mapToDouble(BigDecimal::doubleValue).average().getAsDouble());
+
+        Map<String,BigDecimal> totalAvg = new HashMap<>();
+        totalAvg.put("Sum",total);
+        totalAvg.put("Avg",avg);
+
+        return totalAvg;
+    }
+
+    public Map<?,BigDecimal> getTransactionsSumAvgAmountByAccount(String accountId){
+
+        List<Transaction> dbTransactions = transactionDao.findAll();
+        List<Account> dbAccounts = bankAccountDao.findAll();
+        List<Transaction> filteredTransactions = new ArrayList<>();
+        BigDecimal total = BigDecimal.valueOf(0);
+        BigDecimal avg = BigDecimal.valueOf(0);
+
+
+        if(!accountId.trim().isEmpty()) {
+            filteredTransactions = dbTransactions.stream().
+                    filter(t -> t.accountId().equals(accountId))
+                    .sorted((t1,t2) -> t1.date().compareTo(t2.date()))
+                    .toList();
+        }
+
+        total = BigDecimal.valueOf(filteredTransactions.stream().
+                map(transaction -> transaction.amount()).
+                mapToDouble(BigDecimal::doubleValue).sum());
+
+        avg = BigDecimal.valueOf(filteredTransactions.stream().
+                map(transaction -> transaction.amount()).
+                mapToDouble(BigDecimal::doubleValue).average().getAsDouble());
+
+        Map<String,BigDecimal> totalAvg = new HashMap<>();
+        totalAvg.put("Sum",total);
+        totalAvg.put("Avg",avg);
+
+        return totalAvg;
+    }
+
+    public List<Transaction> detectSuspiciousTransactions(){
+
+        return List.of();
     }
 
 }
